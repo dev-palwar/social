@@ -10,7 +10,7 @@ const postSchema = new mongoose.Schema({
 
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Users",
+    ref: "users",
   },
   createdAt: {
     type: Date,
@@ -21,7 +21,7 @@ const postSchema = new mongoose.Schema({
     {
       user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Users",
+        ref: "users",
       },
     },
   ],
@@ -30,7 +30,7 @@ const postSchema = new mongoose.Schema({
     {
       user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Users",
+        ref: "users",
       },
       comment: {
         type: String,
@@ -40,4 +40,4 @@ const postSchema = new mongoose.Schema({
   ],
 });
 
-module.exports = mongoose.model("Posts", postSchema);
+module.exports = mongoose.model("posts", postSchema);

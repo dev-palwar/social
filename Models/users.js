@@ -20,22 +20,22 @@ const userSchema = new mongoose.Schema({
     minlength: [6, "Password must be of atleast 6 characters"],
     unique: [true, "Emalil already exists"],
   },
-  posts: {
+  posts: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Posts",
-  },
+    ref: "posts",
+  }],
   followers: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Users",
+      ref: "users",
     },
   ],
   following: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Users",
+      ref: "users",
     },
   ],
 });
 
-module.exports = mongoose.model("Users", userSchema);
+module.exports = mongoose.model("users", userSchema);
