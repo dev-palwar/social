@@ -26,9 +26,9 @@ const postSchema = new mongoose.Schema({
     },
   ],
 
-  comments: [
+  commentsArr: [
     {
-      user: {
+      postedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "users",
       },

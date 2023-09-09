@@ -21,7 +21,7 @@ const destroyCookie = (res) => {
   res.status(200).json({ message: "user loggout out" });
 };
 
-const print = (value) => {
+const log = (value) => {
   console.log(value);
 };
 
@@ -33,4 +33,4 @@ const getUser = async (req, res) => {
   return loggedInUser;
 };
 
-module.exports = { sendResponse, setCookie, destroyCookie, print, getUser };
+module.exports = { sendResponse, setCookie, destroyCookie, log, getUser };

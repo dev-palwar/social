@@ -6,7 +6,7 @@ const ifAuthenticated = require("../middlewares/Auth");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  sendResponse(res, "Success", "API working fine");
+  sendResponse(res, "Success", "User route is working");
 });
 
 router.post("/signup", signup);
