@@ -9,13 +9,22 @@ const addPost = async (req, res) => {
     const loggedInUser = await getUser(req, res);
     const resFromDB = await Posts.create({ caption, owner: loggedInUser });
     await Users.updateOne(
-      { email: loggedInUser.email },
+      { username: loggedInUser.username },
       { $push: { posts: resFromDB } }
     );
 
     sendResponse(res, "Success", "Post added", resFromDB);
   } catch (error) {
     sendResponse(res, "Failed", "Internal server error", error.message);
+  }
+};
+
+const getAllPost = async (req, res) => {
+  try {
+    const resFromDB = await Posts.find({}).populate("owner");
+    sendResponse(res, "Success", "", resFromDB);
+  } catch (error) {
+    sendResponse(res, "Success", "", error.message);
   }
 };
 
@@ -26,7 +35,7 @@ const deletePost = async (req, res) => {
 
     await Posts.deleteOne({ _id: post_id });
     const resFromDB = await Users.updateOne(
-      { email: loggedInUser.email },
+      { username: loggedInUser.username },
       { $pull: { posts: post_id } }
     );
 
@@ -96,5 +105,11 @@ const deleteComment = async (req, res) => {
   }
 };
 
-
-module.exports = { addPost, deletePost, likePost, addComment, deleteComment };
+module.exports = {
+  addPost,
+  getAllPost,
+  deletePost,
+  likePost,
+  addComment,
+  deleteComment,
+};

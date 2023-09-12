@@ -7,6 +7,7 @@ const {
   likePost,
   addComment,
   deleteComment,
+  getAllPost,
 } = require("../controllers/posts");
 const router = express.Router();
 
@@ -15,6 +16,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/add", addPost);
+router.get("/getAllPost", getAllPost);
 router.delete("/delete/:post_id", deletePost);
 router.put("/like/:post_id", likePost);
 router.put("/comment/:post_id", addComment);

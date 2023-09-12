@@ -9,7 +9,7 @@ const sendResponse = (res, status, message, resFromDB) => {
 const setCookie = (res, token) => {
   res.cookie("token", token, {
     expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-    httpOnly: true,
+    SameSite: "none"
   });
 };
 

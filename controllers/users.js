@@ -2,7 +2,7 @@ const {
   sendResponse,
   setCookie,
   destroyCookie,
-  print,
+  log,
   getUser,
 } = require("../Utils/functions");
 const Users = require("../Models/users");
@@ -10,29 +10,36 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const signup = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { avtar, name, username, password } = req.body;
+  const response = await Users.findOne({ username: username });
+
+  if (response) {
+    return sendResponse(res, "Failed", "Username already taken");
+  }
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const resFromDB = await Users.create({
+      avtar,
       name,
-      email,
+      username,
       password: hashedPassword,
     });
 
     const token = jwt.sign({ _id: resFromDB._id }, process.env.JWT_TOKEN);
     setCookie(res, token);
     sendResponse(res, "Success", "User added", resFromDB);
+    log(resFromDB);
   } catch (error) {
-    sendResponse(res, "failed", error.message);
+    sendResponse(res, "failed", "Username already taken");
   }
 };
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   try {
-    let resFromDB = await Users.findOne({ email });
+    let resFromDB = await Users.findOne({ username });
     if (!resFromDB) {
       return sendResponse(res, "Failed", "No such record found");
     }
@@ -45,6 +52,18 @@ const login = async (req, res) => {
     }
   } catch (error) {
     sendResponse(res, "Failed", "Internal server error", error.message);
+  }
+};
+
+const getUserDetails = async (req, res) => {
+
+  const {userId}  = req.params;
+
+  try {
+    const resFromDB = await Users.findById(userId);
+    sendResponse(res, "Success", "User found", resFromDB);
+  } catch (error) {
+    sendResponse(res, "Failed", "User not found", error.message);
   }
 };
 
@@ -90,6 +109,9 @@ const followUser = async (req, res) => {
   }
 };
 
-const logout = (req, res) => destroyCookie(res);
+const logout = (req, res) => {
+  res.clearCookie("token", { httpOnly: true });
+  res.status(200).json({ message: "User logged out" });
+};
 
-module.exports = { signup, login, followUser, logout };
+module.exports = { signup, login, getUserDetails, followUser, logout };
